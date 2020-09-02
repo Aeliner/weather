@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Moment from "moment";
 import WeatherComp from "./components/weather";
 import Loading from "./components/loading";
+import SearchForm from './components/search-form';
 import "./App.css";
 
 const API = {
@@ -15,7 +16,8 @@ function renderChildComponent() {
   if (data && forecast) {
     return <WeatherComp data={this.state.data} forecast={this.state.forecast}></WeatherComp>;
   }
-return <Loading></Loading>;
+  else
+  return <Loading></Loading>;
 }
 
 //https://api.openweathermap.org/data/2.5/find?q=florida&appid=3d3c2fd8419ae71eb8bbca7c783dae82&units=metric
@@ -25,11 +27,22 @@ class WeatherApp extends React.Component {
     this.state = {
       data: undefined,
       forecast: undefined,
+      searchResult: [],
     };
   }
 
   componentDidMount() {
     this.getWeatherInfo();
+  }
+
+  searchCity = async(e) =>{
+    e.preventDefault();
+    const city = e.target.elements.city.value;
+    if(city){
+      return await fetch("https://api.openweathermap.org/data/2.5/find?q="+city+"&appid="+API.key+"&units=metric").then((response) => response.json())
+      .then((data) => this.setState({searchResult : data.list}))
+      .catch((error) => this.setState({searchResult : []}));
+    }
   }
 
   getWeatherInfo = async () => {
@@ -63,6 +76,7 @@ class WeatherApp extends React.Component {
 render() {
   return (
     <div className="App">
+      <SearchForm searchCity={this.searchCity} searchResult={this.state.searchResult}></SearchForm>
       {renderChildComponent.call(this)}
     </div>
   );

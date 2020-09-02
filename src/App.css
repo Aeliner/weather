@@ -16,3 +16,75 @@
   justify-content: space-between;
 }
 
+.svg{
+  filter: invert(1);
+}
+
+
+.search-bar{
+  display:flex;
+  width:100%;
+  position:relative;
+  margin: 0 auto;
+}
+
+.search-input{
+  width: 100%;
+  border: 3px solid #00B4CC;
+  border-right: none;
+  padding: 5px;
+  border-radius: 5px 0 0 0px;
+  outline: none;
+  color: #9DBFAF;
+  border-bottom:none;
+}
+
+.search-btn{
+  width: 40px;
+  height: 36px;
+  border: 1px solid #00B4CC;
+  text-align: center;
+  color: #fff;
+  border-radius: 0 5px 0px 0;
+  cursor: pointer;
+  background:transparent;
+  border:none;
+  font-size: 0px;
+  background-image: url("./icons/search.svg");
+  background-size:cover;
+}
+
+.form-wrapper{
+  width:20%;
+  margin:0 auto;
+}
+
+
+ul{
+  list-style:none;
+  padding:0px;
+  text-align:center;
+}
+
+.city-list{
+  text-align:left;
+  border:3px solid #00B4CC;
+  margin-top:0;
+  border-top:none;
+}
+
+.city-list > li{
+  padding:5px 0px 5px 0px;
+}
+
+.city-list > li:hover{
+  cursor:pointer;
+  background: rgba(0,0,0,.1);
+}
+
+.city-list > li span{
+  margin-right:10px;
+  font-size:20px;
+  margin-left:10px;
+}
+
