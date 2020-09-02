@@ -1,3 +1,18 @@
 .App {
   text-align: center;
 }
+
+.weather-list{
+  display:flex;
+  flex-direction:row;
+  justify-content: space-between;
+  width:70%;
+  margin:100px auto;
+}
+
+.weather-card{
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
