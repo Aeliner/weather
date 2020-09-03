@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Moment from "moment";
 import WeatherComp from "./components/weather";
+import "animate.css";
 import Loading from "./components/loading";
 import SearchForm from './components/search-form';
 import "./App.css";
@@ -51,7 +52,7 @@ class WeatherApp extends React.Component {
   }
 
   getWeatherInfo = async (id) => {
-    this.setState({ searchResult : []});
+    this.setState({ searchResult : [], data : undefined, forecast: undefined});
     return await fetch(
       "https://api.openweathermap.org/data/2.5/weather?id="+id+"&appid=" +
       API.key +
