@@ -10,7 +10,7 @@ const SearchForm = (props) => {
         </form>
         <ul className="city-list">
             {props.searchResult.map((city,i) =>(
-                <li key={"city-"+i} className="city-card"><span>{city.name},{city.sys.country}</span><img src={"https://openweathermap.org/images/flags/"+city.sys.country.toLowerCase()+".png"}alt=""/></li>
+                <li key={"city-"+i} className="city-card" onClick={() => {props.getWeatherInfo(city.id)}}><span>{city.name},{city.sys.country}</span><img src={"https://openweathermap.org/images/flags/"+city.sys.country.toLowerCase()+".png"}alt=""/></li>
               ))}
         </ul>
         </div>

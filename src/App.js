@@ -32,22 +32,28 @@ class WeatherApp extends React.Component {
   }
 
   componentDidMount() {
-    this.getWeatherInfo();
+    //this.getWeatherInfo();
   }
 
   searchCity = async(e) =>{
     e.preventDefault();
     const city = e.target.elements.city.value;
+    e.target.elements.city.value = "";
     if(city){
+      debugger;
       return await fetch("https://api.openweathermap.org/data/2.5/find?q="+city+"&appid="+API.key+"&units=metric").then((response) => response.json())
-      .then((data) => this.setState({searchResult : data.list}))
+      .then((data) => {
+        if(data.list)
+        this.setState({searchResult : data.list})
+      })
       .catch((error) => this.setState({searchResult : []}));
     }
   }
 
-  getWeatherInfo = async () => {
+  getWeatherInfo = async (id) => {
+    this.setState({ searchResult : []});
     return await fetch(
-      "https://api.openweathermap.org/data/2.5/weather?q=paysandu,&appid=" +
+      "https://api.openweathermap.org/data/2.5/weather?id="+id+"&appid=" +
       API.key +
       "&units=metric"
     )
@@ -76,7 +82,7 @@ class WeatherApp extends React.Component {
 render() {
   return (
     <div className="App">
-      <SearchForm searchCity={this.searchCity} searchResult={this.state.searchResult}></SearchForm>
+      <SearchForm searchCity={this.searchCity} searchResult={this.state.searchResult} getWeatherInfo={this.getWeatherInfo}></SearchForm>
       {renderChildComponent.call(this)}
     </div>
   );

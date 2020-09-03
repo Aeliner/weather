@@ -10,8 +10,8 @@ const WeatherComp = (props) => {
             <img src={require("../icons/"+ props.data.weather[0].id+".svg")} className="svg" alt=""/>
             </div>
           <div className="min-max">
-              {Math.round(props.data.main.temp_min)}°C
-              {Math.round(props.data.main.temp_max)}°C
+            <span className="min">{Math.round(props.data.main.temp_min)}°C</span>
+            <span className="max">{Math.round(props.data.main.temp_max)}°C</span>
           </div>
       </div>
       <div className="forecast-info">
