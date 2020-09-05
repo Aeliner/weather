@@ -14,12 +14,10 @@ const API = {
 function renderChildComponent() {
   const { data } = this.state;
   const { forecast } = this.state;
-  const { tempType } = this.state;
   const {loading} = this.state;
   
-  if (data && forecast && tempType) {
-    this.state.oldTempType = this.state.tempType;
-    return <WeatherComp data={this.state.data} forecast={this.state.forecast} tempType={this.state.tempType}></WeatherComp>;
+  if (data && forecast) {
+    return <WeatherComp data={this.state.data} forecast={this.state.forecast}></WeatherComp>;
   }
   
 }
@@ -114,15 +112,15 @@ class WeatherApp extends React.Component {
    getHourlyForecast = (data) => {
   let newData = data.hourly.slice(1, 8);
   for (let i = 0; i < newData.length; i++) {
-    let t = newData[i].dt;
-    newData[i].dt = Moment.unix(t).format('LT');
+    let t = newData[i].dt + data.timezone_offset;
+    newData[i].dt = Moment.unix(t).utc().format('LT');
   }
   this.setState({ forecast: newData });
 };
 
 render() {
   return (
-    <div className="App">
+    <div className={"App"+" "+this.state.tempType}>
       <SearchForm searchCity={this.searchCity} searchKey ={this.searchKey} searchResult={this.state.searchResult} getWeatherInfo={this.getWeatherInfo}></SearchForm>
        {renderChildComponent.call(this)}
     </div>

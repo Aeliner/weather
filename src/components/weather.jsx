@@ -1,7 +1,7 @@
 import React from "react";
 const WeatherComp = (props) => {
   return (
-    <div className={"container"+" "+ props.tempType}>
+    <div className="container">
       <h1 className="animate__animated animate__fadeIn">Current weather for {props.data.name},{props.data.sys.country}</h1>
       <div className="current-weather-info  animate__animated animate__fadeIn animate__delay-1s">
           <div className="temperature">
