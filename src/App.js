@@ -14,11 +14,14 @@ const API = {
 function renderChildComponent() {
   const { data } = this.state;
   const { forecast } = this.state;
-  if (data && forecast) {
-    return <WeatherComp data={this.state.data} forecast={this.state.forecast}></WeatherComp>;
+  const { tempType } = this.state;
+  const {loading} = this.state;
+  
+  if (data && forecast && tempType) {
+    this.state.oldTempType = this.state.tempType;
+    return <WeatherComp data={this.state.data} forecast={this.state.forecast} tempType={this.state.tempType}></WeatherComp>;
   }
-  else
-  return <Loading></Loading>;
+  
 }
 
 //https://api.openweathermap.org/data/2.5/find?q=florida&appid=3d3c2fd8419ae71eb8bbca7c783dae82&units=metric
@@ -28,12 +31,15 @@ class WeatherApp extends React.Component {
     this.state = {
       data: undefined,
       forecast: undefined,
+      tempType : undefined,
+      oldTempType: undefined,
       searchResult: [],
     };
   }
 
   componentDidMount() {
     //this.getWeatherInfo();
+    this.getWeatherInfo(3441243);
   }
 
   searchCity = async(e) =>{
@@ -51,19 +57,53 @@ class WeatherApp extends React.Component {
     }
   }
 
+  searchKey = async(e) =>{
+    e.preventDefault();
+    const city = e.target.value;
+    if(city){
+      return await fetch("https://api.openweathermap.org/data/2.5/find?q="+city+"&appid="+API.key+"&units=metric").then((response) => response.json())
+      .then((data) => {
+        if(data.list)
+        this.setState({searchResult : data.list})
+      })
+      .catch((error) => this.setState({searchResult : []}));
+    }
+  }
+
   getWeatherInfo = async (id) => {
-    this.setState({ searchResult : [], data : undefined, forecast: undefined});
+    this.setState({ loading : true});
     return await fetch(
       "https://api.openweathermap.org/data/2.5/weather?id="+id+"&appid=" +
       API.key +
       "&units=metric"
     )
-      .then((response) => response.json())
+      .then((response) => {
+        this.setState({ searchResult : []});
+        return response.json();
+      })
       .then((data) => this.getOneCallApi(data))
       .catch((error) => console.log(error));
   };
 
   getOneCallApi = async (data) => {
+    let tempVal = Math.round(data.main.temp);
+    let tempType;
+    if(tempVal <= 0){
+      tempType = "hardCold";
+    }
+    if(tempVal > 0 && tempVal <= 16){
+      tempType = "lightCold";
+    }
+    if(tempVal > 16 && tempVal <= 23){
+      tempType = "neutral";
+    }
+    if(tempVal > 23 && tempVal <= 35){
+      tempType = "lightHot";
+    }
+    else if(tempVal > 35){
+      tempType = "hardHot";
+    }
+    this.setState({tempType : tempType});
     this.setState({ data: data });
     return await fetch(
       "https://api.openweathermap.org/data/2.5/onecall?lat=" + data.coord.lat + "&lon=" + data.coord.lon + "&exclude=daily,minutely,current&appid=" + API.key + "&units=metric").then((response) => response.json())
@@ -83,8 +123,8 @@ class WeatherApp extends React.Component {
 render() {
   return (
     <div className="App">
-      <SearchForm searchCity={this.searchCity} searchResult={this.state.searchResult} getWeatherInfo={this.getWeatherInfo}></SearchForm>
-      {renderChildComponent.call(this)}
+      <SearchForm searchCity={this.searchCity} searchKey ={this.searchKey} searchResult={this.state.searchResult} getWeatherInfo={this.getWeatherInfo}></SearchForm>
+       {renderChildComponent.call(this)}
     </div>
   );
 }

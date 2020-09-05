@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Loading = () => {
+const Loading = (props) => {
     return (
-      <div className="container">
-        <h1>Loading...</h1>
+      <div className={"container-loading"}>
+        <h1 style={{color: "#fff"}}>Loading...</h1>
       </div>
     );
   };

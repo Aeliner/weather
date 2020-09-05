@@ -4,7 +4,7 @@ const SearchForm = (props) => {
         <div className="form-wrapper">
         <form onSubmit={props.searchCity}>
 <div className="search-bar">
-            <input type="search" name="city" className="search-input" placeholder="Search..."></input>
+            <input type="search" onKeyUp={props.searchKey} autoComplete="off" name="city" className="search-input" placeholder="Search..."></input>
             <input type="submit" className="search-btn"></input>
         </div>
         </form>
